@@ -9,13 +9,13 @@ datasource db {
 
 model User {
   id        Int      @id @default(autoincrement())
-  name      String? 
-  email     String?   @unique
+  name      String?
+  email     String?  @unique
   password  String?
   role      String   @default("USER")
   createdAt DateTime @default(now())
+  Cart      Cart[]
 }
-
 
 model Products {
   id          Int      @id @default(autoincrement())
@@ -23,8 +23,9 @@ model Products {
   description String?
   price       Float?
   image       String?
-  categoryId  Int?    
+  categoryId  Int?
   createdAt   DateTime @default(now())
+  Cart        Cart[]
 }
 
 model Order {
@@ -35,12 +36,22 @@ model Order {
   status    String   @default("Pending")
   createdAt DateTime @default(now())
 }
+
 model Category {
-  id     Int    @id @default(autoincrement())
-  name   String
-  image  String
+  id    Int    @id @default(autoincrement())
+  name  String
+  image String
 }
 
+model Cart {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-
-
+  // Relations
+  user    User     @relation(fields: [userId], references: [id])
+  product Products @relation(fields: [productId], references: [id])
+}
